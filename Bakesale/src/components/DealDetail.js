@@ -23,21 +23,25 @@ class DealDetail extends React.Component {
     return (
       <View style={styles.deal}>
         <Image source={{ uri: deal.media[0] }} style={styles.image} />
-        <View style={styles.info}>
-          <Text style={styles.title}>{deal.title}</Text>
-          <View style={styles.footer}>
-            <Text style={styles.cause}>{deal.cause.name}</Text>
-            <Text style={styles.price}>{priceDisplay(deal.price)}</Text>
-          </View>
-        </View>
-        {deal.user && (
+        <View style={styles.detail}>
           <View>
-            <Image source={{ uri: deal.user.avatar }} style={styles.avatar} />
-            <Text>{deal.user.name}</Text>
+            <Text style={styles.title}>{deal.title}</Text>
           </View>
-        )}
-        <View>
-          <Text>{deal.description}</Text>
+          <View style={styles.footer}>
+            <View style={styles.info}>
+              <Text style={styles.price}>{priceDisplay(deal.price)}</Text>
+              <Text style={styles.cause}>{deal.cause.name}</Text>
+            </View>
+            {deal.user && (
+              <View style={styles.user}>
+                <Image source={{ uri: deal.user.avatar }} style={styles.avatar} />
+                <Text>{deal.user.name}</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.description}>
+            <Text>{deal.description}</Text>
+          </View>
         </View>
       </View>
     );
@@ -48,37 +52,51 @@ const styles = StyleSheet.create({
   deal: {
     marginHorizontal: 12,
     marginTop: 50,
+    borderColor: '#bbb',
+    borderWidth: 1,
   },
   image: {
     width: '100%',
     height: 150,
     backgroundColor: '#ccc',
   },
-  info: {
-    padding: 10,
-    backgroundColor: '#fff',
-    borderColor: '#bbb',
-    borderWidth: 1,
-    borderTopWidth: 0,
+  detail: {
   },
   title: {
     fontSize: 16,
+    padding: 10,
     fontWeight: 'bold',
-    marginBottom: 5,
+    backgroundColor: 'rgba(237, 149, 45, 0.4)',
   },
   footer: {
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  info: {
+    alignItems: 'center',
+  },
+  user: {
+    alignItems: 'center',
   },
   cause: {
-    flex: 2,
+    marginVertical: 10,
   },
   price: {
-    flex: 1,
-    textAlign: 'right',
+    fontWeight: 'bold'
   },
   avatar: {
     width: 60,
     height: 60,
+    borderRadius: 30,
+  },
+  description: {
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderStyle: 'dotted',
+    margin: 10,
+    padding: 10,
   },
 });
 
