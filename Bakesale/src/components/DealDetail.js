@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  ScrollView,
   View,
   Text,
   Image,
@@ -87,10 +88,10 @@ class DealDetail extends React.Component {
           source={{ uri: deal.media[this.state.imageIndex] }}
           style={[{ left: this.imageXPos }, styles.image]}
         />
-        <View style={styles.detail}>
-          <View>
-            <Text style={styles.title}>{deal.title}</Text>
-          </View>
+        <View>
+          <Text style={styles.title}>{deal.title}</Text>
+        </View>
+        <ScrollView style={styles.detail}>
           <View style={styles.footer}>
             <View style={styles.info}>
               <Text style={styles.price}>{priceDisplay(deal.price)}</Text>
@@ -110,13 +111,16 @@ class DealDetail extends React.Component {
             <Text>{deal.description}</Text>
           </View>
           <Button title="Buy this deal!" onPress={this.openDealUrl} />
-        </View>
+        </ScrollView>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  deal: {
+    marginBottom: 20,
+  },
   backLink: {
     marginBottom: 5,
     color: '#22f',
