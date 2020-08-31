@@ -13,8 +13,8 @@ class App extends React.Component {
     currentDealId: null,
   };
   async componentDidMount() {
-    const deals = await ajax.fetchInitialDeals();
-    this.setState({ deals });
+    // const deals = await ajax.fetchInitialDeals();
+    // this.setState({ deals });
   }
   searchDeals = async (searchTerm) => {
     let dealsFromSearch = [];
