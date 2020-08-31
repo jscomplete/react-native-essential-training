@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   PanResponder,
   Animated,
+  Dimensions,
   StyleSheet,
 } from 'react-native';
 
@@ -14,13 +15,22 @@ import { priceDisplay } from '../util';
 import ajax from '../ajax';
 
 class DealDetail extends React.Component {
+  imageXPos = new Animated.Value(0);
   imagePanResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onPanResponderMove: (evt, gs) => {
-      console.log('MOVING', gs.dx);
+      this.imageXPos.setValue(gs.dx);
     },
     onPanResponderRelease: (evt, gs) => {
-      console.log('RELEASED');
+      const width = Dimensions.get('window').width;
+      if (Math.abs(gs.dx) > width * 0.4) {
+        const direction = Math.sign(gs.dx);
+        // -1 for left, 1 for right
+        Animated.timing(this.imageXPos, {
+          toValue: direction * width,
+          duration: 250,
+        }).start();
+      }
     }
   });
   static propTypes = {
@@ -44,10 +54,10 @@ class DealDetail extends React.Component {
         <TouchableOpacity onPress={this.props.onBack}>
           <Text style={styles.backLink}>Back</Text>
         </TouchableOpacity>
-        <Image
+        <Animated.Image
           {...this.imagePanResponder.panHandlers}
           source={{ uri: deal.media[this.state.imageIndex] }}
-          style={styles.image}
+          style={[{ left: this.imageXPos }, styles.image]}
         />
         <View style={styles.detail}>
           <View>
