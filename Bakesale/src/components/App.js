@@ -10,9 +10,7 @@ class App extends React.Component {
   };
   async componentDidMount() {
     const deals = await ajax.fetchInitialDeals();
-    this.setState(prevState => {
-      return { deals };
-    });
+    this.setState({ deals });
   }
   render() {
     return (
