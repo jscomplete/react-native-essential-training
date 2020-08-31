@@ -22,17 +22,40 @@ class DealDetail extends React.Component {
       this.imageXPos.setValue(gs.dx);
     },
     onPanResponderRelease: (evt, gs) => {
-      const width = Dimensions.get('window').width;
-      if (Math.abs(gs.dx) > width * 0.4) {
+      this.width = Dimensions.get('window').width;
+      if (Math.abs(gs.dx) > this.width * 0.4) {
         const direction = Math.sign(gs.dx);
         // -1 for left, 1 for right
         Animated.timing(this.imageXPos, {
-          toValue: direction * width,
+          toValue: direction * this.width,
           duration: 250,
+        }).start(() => this.handleSwipe(-1 * direction));
+      } else {
+        Animated.spring(this.imageXPos, {
+          toValue: 0
         }).start();
       }
     }
   });
+
+  handleSwipe = (indexDirection) => {
+    if (!this.state.deal.media[this.state.imageIndex + indexDirection]) {
+      Animated.spring(this.imageXPos, {
+        toValue: 0
+      }).start();
+      return;
+    }
+    this.setState((prevState) => ({
+      imageIndex: prevState.imageIndex + indexDirection
+    }), () => {
+      // Next image animation
+      this.imageXPos.setValue(indexDirection * this.width);
+      Animated.spring(this.imageXPos, {
+        toValue: 0
+      }).start();
+    });
+  };
+
   static propTypes = {
     initialDealData: PropTypes.object.isRequired,
     onBack: PropTypes.func.isRequired,
