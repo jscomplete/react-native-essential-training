@@ -4,6 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import ajax from '../ajax';
 import DealList from './DealList';
 import DealDetail from './DealDetail';
+import SearchBar from './SearchBar';
 
 class App extends React.Component {
   state = {
@@ -30,15 +31,20 @@ class App extends React.Component {
   render() {
     if (this.state.currentDealId) {
       return (
-        <DealDetail
-          initialDealData={this.currentDeal()}
-          onBack={this.unsetCurrentDeal}
-        />
+        <View style={styles.main}>
+          <DealDetail
+            initialDealData={this.currentDeal()}
+            onBack={this.unsetCurrentDeal}
+          />
+        </View>
       );
     }
     if (this.state.deals.length > 0) {
       return (
-        <DealList deals={this.state.deals} onItemPress={this.setCurrentDeal} />
+        <View style={styles.main}>
+          <SearchBar />
+          <DealList deals={this.state.deals} onItemPress={this.setCurrentDeal} />
+        </View>
       );
     }
     return (
@@ -54,6 +60,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  main: {
+    marginTop: 30,
   },
   header: {
     fontSize: 40,
