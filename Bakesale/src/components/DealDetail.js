@@ -1,17 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  PanResponder,
+  Animated,
+  StyleSheet,
+} from 'react-native';
 
 import { priceDisplay } from '../util';
 import ajax from '../ajax';
 
 class DealDetail extends React.Component {
+  imagePanResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: (evt, gs) => {
+      console.log('MOVING', gs.dx);
+    },
+    onPanResponderRelease: (evt, gs) => {
+      console.log('RELEASED');
+    }
+  });
   static propTypes = {
     initialDealData: PropTypes.object.isRequired,
     onBack: PropTypes.func.isRequired,
   };
   state = {
     deal: this.props.initialDealData,
+    imageIndex: 0,
   };
   async componentDidMount() {
     const fullDeal = await ajax.fetchDealDetail(this.state.deal.key);
@@ -26,7 +44,11 @@ class DealDetail extends React.Component {
         <TouchableOpacity onPress={this.props.onBack}>
           <Text style={styles.backLink}>Back</Text>
         </TouchableOpacity>
-        <Image source={{ uri: deal.media[0] }} style={styles.image} />
+        <Image
+          {...this.imagePanResponder.panHandlers}
+          source={{ uri: deal.media[this.state.imageIndex] }}
+          style={styles.image}
+        />
         <View style={styles.detail}>
           <View>
             <Text style={styles.title}>{deal.title}</Text>
@@ -38,7 +60,10 @@ class DealDetail extends React.Component {
             </View>
             {deal.user && (
               <View style={styles.user}>
-                <Image source={{ uri: deal.user.avatar }} style={styles.avatar} />
+                <Image
+                  source={{ uri: deal.user.avatar }}
+                  style={styles.avatar}
+                />
                 <Text>{deal.user.name}</Text>
               </View>
             )}
@@ -85,7 +110,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   price: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   avatar: {
     width: 60,
